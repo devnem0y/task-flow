@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: taskflow
+
+  # База данных
+  datasource:
+    url: jdbc:postgresql://192.168.1.126:5432/taskflow
+    username: ${DB_USER:taskflow}
+    password: ${DB_PASSWORD:secret}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+  # JPA / Hibernate
+  jpa:
+    hibernate:
+      # validate — Hibernate проверяет схему при старте, но не меняет её
+      # Flyway отвечает за изменения схемы
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false   # отключаем antipattern Open Session in View
+
+  # Flyway — миграции запускаются автоматически при старте
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  # Spring Security — временно отключим автоконфигурацию, пока не настроили JWT
+  # (уберём это в главе о безопасности)
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Заглушка — заменим на реальный issuer-uri позже
+          issuer-uri: http://localhost:9000
+
+# HTTP-сервер
+server:
+  port: 8080
+
+# Actuator — открываем health и info эндпоинты
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+# Метаинформация о приложении (отображается в /actuator/info)
+info:
+  app:
+    name: TaskFlow API
+    version: 0.0.1
