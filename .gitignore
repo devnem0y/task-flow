@@ -199,3 +199,12 @@ README.html
 *.iml
 .idea
 .exercism
+
+
+# Docker & secrets
+.env
+docker-compose.override.yml
+
+# Spring Boot
+application-local.properties
+application-dev.properties
