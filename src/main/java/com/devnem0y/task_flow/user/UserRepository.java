@@ -1,9 +1,6 @@
 package com.devnem0y.task_flow.user;
 
-import jakarta.validation.constraints.Positive;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class UserRepository {
-    public <T> ScopedValue<T> findById(@Positive Long aLong) {
-        return null;
-    }
+public interface UserRepository extends JpaRepository<User, Long> {
 }

@@ -3,13 +3,10 @@ package com.devnem0y.task_flow.task;
 import com.devnem0y.task_flow.common.exception.ProjectNotFoundException;
 import com.devnem0y.task_flow.common.exception.TaskNotFoundException;
 import com.devnem0y.task_flow.common.exception.UserNotFoundException;
-import com.devnem0y.task_flow.project.Project;
 import com.devnem0y.task_flow.project.ProjectRepository;
-import com.devnem0y.task_flow.user.User;
 import com.devnem0y.task_flow.user.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +37,13 @@ public class TaskService {
                 request.description(),
                 request.priority(),
                 request.deadline(),
-                (Project) project
+                project
         );
 
         if (request.assigneeId() != null) {
             var assignee = userRepository.findById(request.assigneeId())
                     .orElseThrow(() -> new UserNotFoundException(request.assigneeId()));
-            task.assignTo((User) assignee);
+            task.assignTo(assignee);
         }
 
         return TaskResponse.from(taskRepository.save(task));
@@ -66,11 +63,11 @@ public class TaskService {
                                             TaskStatus status,
                                             Priority priority,
                                             Pageable pageable) {
-        /*var spec = TaskSpecifications.inProject(projectId)
+        var spec = TaskSpecifications.inProject(projectId)
                 .and(TaskSpecifications.withStatus(status))
-                .and(TaskSpecifications.withPriority(priority));*/
+                .and(TaskSpecifications.withPriority(priority));
 
-        return taskRepository.findAll((Specification<Task>) null, pageable).map(TaskResponse::from);
+        return taskRepository.findAll(spec, pageable).map(TaskResponse::from);
     }
 
     // ── UPDATE ─────────────────────────────────────────────────────────────

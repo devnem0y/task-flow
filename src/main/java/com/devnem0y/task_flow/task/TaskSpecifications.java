@@ -1,17 +1,27 @@
 package com.devnem0y.task_flow.task;
 
-import java.util.BitSet;
+import org.springframework.data.jpa.domain.Specification;
 
 public class TaskSpecifications {
-    public static BitSet inProject(Long projectId) {
-        return BitSet.valueOf(new long[]{projectId});
+
+    public static Specification<Task> inProject(Long projectId) {
+        return (root, query, cb) -> {
+            if (projectId == null) return null;
+            return cb.equal(root.get("project").get("id"), projectId);
+        };
     }
 
-    public static BitSet withStatus(TaskStatus status) {
-        return null;
+    public static Specification<Task> withStatus(TaskStatus status) {
+        return (root, query, cb) -> {
+            if (status == null) return null;
+            return cb.equal(root.get("status"), status);
+        };
     }
 
-    public static Object withPriority(Priority priority) {
-        return null;
+    public static Specification<Task> withPriority(Priority priority) {
+        return (root, query, cb) -> {
+            if (priority == null) return null;
+            return cb.equal(root.get("priority"), priority);
+        };
     }
 }
