@@ -53,6 +53,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception ex, HttpServletRequest req) {
         return ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера");
+                HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера " + ex.getMessage());
     }
 }
